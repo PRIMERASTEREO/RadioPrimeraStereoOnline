@@ -1,0 +1,24 @@
+{
+  "name": "Primera Stereo Radio Video Online",
+  "short_name": "Primera Stereo",
+  "description": "Primera Stereo Radio Video Online - La mejor música las 24 horas",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b0c10",
+  "theme_color": "#0b0c10",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://primera-stereo.netlify.app/11.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://primera-stereo.netlify.app/11.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=de2d202b-8287-4e22-9488-62cf36bbef11
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>PRIMERA STEREO 📻 RADIO VIDEO ONLINE</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0c10">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Primera Stereo">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="https://primerastereo.netlify.app/favicon.png">
+    <link rel="icon" type="image/png" href="https://primerastereo.netlify.app/favicon.png" sizes="512x512">
+    <link rel="icon" href="https://primera-stereo.netlify.app/PSRO5-5.png" sizes="192x192" />
+    <link rel="icon" href="https://primera-stereo.netlify.app/PSRO5-5.png" sizes="32x32" /> 
+    <link rel="icon" href="https://primera-stereo.netlify.app/PSRO5-5.png" sizes="16x16" />    
+    <link rel="apple-touch-icon" href="https://primera-stereo.netlify.app/11.png" />
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100% !important; height: 100vh !important; height: 100dvh !important; overflow: hidden !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0c10; color: #ffffff; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+        .app-container { position: relative !important; width: 100% !important; height: 100vh !important; height: 100dvh !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; align-items: center !important; background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('fondo.png') no-repeat center center !important; background-size: cover !important; background-attachment: fixed !important; padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 20px) 20px !important; text-align: center !important; box-sizing: border-box !important; }
+
+        
+        .controls-hidden { opacity: 0 !important; pointer-events: none !important; }
+
+        .header-section { z-index: 10; width: 100%; margin-top: 0px; flex-shrink: 0; }
+        .main-logo { font-size: 22pt; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; background: linear-gradient(45deg, #ff7b00, #ffae00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0px 4px 10px rgba(0,0,0,0.3); }
+        .sub-logo { font-size: 13pt; font-weight: bold; color: #00d4ff; letter-spacing: 2px; margin-top: -2px; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.9); }
+        .player-card { position: relative; overflow: hidden; z-index: 5; width: 100%; max-width: 440px; height: 440px; background: #14161a; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9); margin: auto 0 !important; flex-shrink: 0; }
+        .album-art-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 6; background-size: cover; background-position: center; background-repeat: no-repeat; transition: opacity 0.4s ease; opacity: 1; }
+        .player-video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #000000; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; overflow: hidden; }
+        .player-card.video-mode .player-video-bg { z-index: 7; opacity: 1; }
+        .player-card.video-mode .album-art-bg { opacity: 0; }
+        .player-video-bg iframe, #yt-player-element { width: 100% !important; height: 100% !important; border: none !important; transform: scale(1.35) !important; object-fit: cover !important; }
+        .hover-control { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 8; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            gap: 16px; padding: 25px; background: rgba(0, 0, 0, 0.7); 
+            transition: opacity 0.3s ease; opacity: 0; pointer-events: none;
+        }
+        
+        .player-card:hover .hover-control, .player-card:active .hover-control { 
+            opacity: 1 !important; pointer-events: auto !important; .player-card.touch-active .hover-control
+        }
+        .player-card.video-mode .hover-control { opacity: 0; background: rgba(0, 0, 0, 0); pointer-events: none; }
+        .player-card.video-mode:hover .hover-control, .player-card.video-mode:active .hover-control { opacity: 1 !important; background: rgba(0, 0, 0, 0.75) !important; pointer-events: auto !important; }
+        .station-title { font-size: 12pt; font-weight: bold; color: #fc7f03; letter-spacing: 1px; text-shadow: 0 2px 6px rgba(0,0,0,1); }
+        .station-subtitle { font-size: 10pt; color: #00d4ff; font-weight: 600; margin-top: -20px; text-shadow: 0 2px 4px rgba(0,0,0,1); }
+        .bars-container { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 35px; margin: 5px 0; transition: opacity 0.3s ease; }
+        .player-card.video-mode .bars-container { opacity: 0 !important; }
+        .bar { width: 4px; height: 5px; background-color: #fc7f03; border-radius: 2px; transition: height 0.2s ease; }
+        .play-btn { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #0072ff, #00d4ff); border: none; outline: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6); color: white; font-size: 26px; transition: transform 0.2s ease, box-shadow 0.3s ease; z-index: 12; }
+        .play-btn:hover { transform: scale(1.1) !important; box-shadow: 0 6px 24px rgba(0, 212, 255, 0.8) !important; }
+        .volume-container { display: flex; align-items: center; gap: 10px; width: 85%; margin-top: 5px; background: rgba(0, 0, 0, 0.6); padding: 8px 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: border-color 0.2s ease; }
+        .volume-container:hover { border-color: rgba(0, 212, 255, 0.5); }
+        .volume-icon { color: #fc7f03; font-size: 14px; }
+        .volume-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.3); outline: none; }
+        .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #00d4ff; cursor: pointer; transition: transform 0.1s ease; }
+        .volume-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+        .status-badge { position: relative; display: flex; align-items: center; justify-content: flex-start; gap: 10px; font-size: 8pt; font-weight: bold; color: #ffffff; z-index: 10; width: 100%; max-width: 440px; padding: 12px 15px; background: rgba(20, 22, 26, 0.95); border-radius: 12px; min-height: 48px; border: 1px solid rgba(255, 255, 255, 0.15); margin-top: 5px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); overflow: hidden; flex-shrink: 0; }
+        .metadata-artist { color: #fc7f03 !important; font-weight: bold; }
+        .metadata-separator { color: #ffffff !important; margin: 0 6px; }
+        .metadata-track { color: #00d4ff !important; font-weight: bold; }
+        .marquee-container { flex: 1; overflow: hidden; position: relative; display: flex; align-items: center; height: 20px; }
+        .marquee-text { display: inline-block; white-space: nowrap; position: absolute; animation: marqueeEffect 14s linear infinite; line-height: 20px; }
+        @keyframes marqueeEffect { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .footer-section { z-index: 10; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 2px; margin-bottom: 5px; flex-shrink: 0; }
+        .social-title { font-size: 8pt; color: #00d4ff !important; font-weight: bold; }
+        .social-icons { display: flex; justify-content: center; gap: 12px; }
+        .social-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; text-decoration: none; color: white; font-size: 16px; border: 1px solid rgba(255,255,255,0.05); transition: background 0.2s, transform 0.2s; }
+        .social-btn:hover { transform: translateY(-3px); }
+        .social-btn.facebook:hover { background: #1877f2; }
+        .social-btn.instagram:hover { background: #e1306c; }
+        .social-btn.tiktok:hover { background: #000000; }
+        .social-btn.youtube:hover { background: #ff0000; }
+        .social-btn.google-play:hover { background: #20e8c7; }
+        .social-btn.whatsapp:hover { background: #20e825; }
+        .copyright { font-size: 8pt; color: #00d4ff; line-height: 1.3; }
+        @media (max-height: 660px) or (max-width: 480px) { .player-card, .status-badge { max-width: 320px; font-size: 8pt; } .player-card { height: 300px; } .main-logo { font-size: 18pt; } .play-btn { width: 55px; height: 55px; font-size: 20px; } .bars-container { height: 25px; } }
+    </style>
+</head>
+<body>
+
+    <div class="app-container" id="main-app">
+        <div class="header-section">
+            <h1 class="main-logo">Primera Stereo</h1>
+            <div class="sub-logo">Radio Video Online</div>
+        </div>
+
+        <div class="player-card art-mode" id="player-card">
+            <div id="album-art-bg" class="album-art-bg"></div>
+            <div id="player-video-bg" class="player-video-bg"><div id="yt-player-element"></div></div>
+            <div class="hover-control" id="hover-control">
+                <div class="station-title">Primera Stereo</div>
+                <div class="station-subtitle">Radio Video Online</div>   
+                <div class="bars-container" id="radio-visualizer">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+                <button class="play-btn" id="play-btn"><i class="fas fa-play"></i></button>
+                <div class="volume-container">
+                    <span><i class="fas fa-volume-down volume-icon"></i></span>
+                    <input type="range" min="0" max="1" step="0.01" value="0.7" class="volume-slider" id="volume-slider">
+                    <span><i class="fas fa-volume-up volume-icon"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-badge" id="status">
+            <i class="fas fa-broadcast-tower" id="status-icon"></i>
+            <div class="marquee-container"><span class="marquee-text" id="status-text">Sincronizando señal en vivo...</span></div>
+        </div>
+
+        <div class="footer-section">
+            <div id="banner-container" style="width: 100%; max-width: 440px; margin: 0 auto 0px auto; display: flex; flex-direction: column; align-items: center; padding: 0 0px;">
+                <div style="font-size: 12px; color: #fc7f03 !important; font-weight: bold; font-family: Verdana; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase;">Tu Publicidad Aquí</div>
+                <a id="ad-link" href="" target="_blank" style="width: 100%; display: block;">
+                    <img id="ad-banner" src="https://primerastereo.netlify.app/disponible3.jpg" alt="Tu Publicidad Aquí" style="width: 100%; height: 50px; object-fit: fill; border: 0; border-radius: 4px;">
+                </a>
+            </div>
+
+            <div class="social-title"><img src="https://primerastereo.netlify.app/redes-sociales.png" alt="Icono" style="width: 20px; height: auto;">  SÍGUENOS EN NUESTRAS REDES SOCIALES:</div>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/PrimeraStereoRadio" class="social-btn facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/Primera.Stereo/" class="social-btn instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@primerastereo" class="social-btn tiktok" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.youtube.com/@PrimeraStereo" class="social-btn youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.appcreator24.com/app3819260-6rbmq8" class="social-btn google-play" target="_blank"><i class="fab fa-google-play"></i></a>
+                <a href="https://wa.link/lplcl8" class="social-btn whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <div class="copyright" style="margin-top: 0px; text-align: center; color: #ff7b00; font-size: 8px; font-family: sans-serif;">
+                © 2010 - 2026 Primera Stereo Radio Video Online<br>
+                <span style="margin-left: 5px;">
+                    <a href='https://primera-stereo.netlify.app/privacidad' style='color: #00d4ff; font-size: 8px; text-decoration: underline;' target='_blank'>Política de Privacidad</a>
+                </span>
+            </div>
+
+            <div style="width: 100%;">
+                <p style="margin: 0px 0 0 0; color: #ff7b00; font-size: 10px; font-family: sans-serif; text-align: center;">Gracias por visitarnos!</p>
+                <div style="font-family: Arial, sans-serif; font-size: 10px; color: #00d4ff; margin-top: 2px; text-align: center;">
+                    Visitas: <span id="mi-contador" style="font-weight: bold; color: #ff7b00;">1,236,783</span>
+                </div>
+                <img src="https://counter7.optistats.ovh/private/contadorvisitasgratis.php?c=m3b8llx9qnmw761p4f9b8efb4899b82c" style="display:none;" alt="contador" onload="registrarVisita()">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const banners = [
+            { img: "https://primerastereoprueba.netlify.app/El%20Arca%20Grill.png", link: "https://instagram.com/elarcagrillunico" },
+            { img: "https://primerastereo.netlify.app/disponible2.jpg", link: "https://api.whatsapp.com/send?phone=+5804127097429" },
+            { img: "https://primerastereo.netlify.app/Alvacom%20Systems.jpg", link: "https://www.instagram.com/alvacomsystems" },
+            { img: "https://primerastereo.netlify.app/KINESIOLOGIA2.gif", link: "https://www.instagram.com/nely_alvarez" },
+            { img: "https://primerastereoprueba.netlify.app/Diseño sin título.gif", link: "http://www.en3d.io" },
+            { img: "https://primerastereo.netlify.app/EL%20PALADAR%20GRILL4.png", link: "https://wa.me/584241897086" },
+            { img: "https://primera-stereo.netlify.app/BANNER%20ELENA.png", link: "https://api.whatsapp.com/send?phone=+5804127102509" },
+            { img: "https://radioprimerastereo.netlify.app/2.png", link: "https://radioprimerastereo.netlify.app" },
+        ];
+        let bIdx = 0;
+
+        function updateBanners() {
+            if(banners.length > 0) {
+                document.getElementById('ad-banner').src = banners[bIdx].img;
+                document.getElementById('ad-link').href = banners[bIdx].link;
+                bIdx = (bIdx + 1) % banners.length;
+            }
+        }
+   
+        function registrarVisita() {
+            var visitasHistoricas = 1236783; 
+            var nuevasVisitas = parseInt(localStorage.getItem('visitas_nuevas') || 0) + 1;
+            localStorage.setItem('visitas_nuevas', nuevasVisitas);
+            
+            var totalSuma = visitasHistoricas + nuevasVisitas;
+            document.getElementById('mi-contador').innerText = totalSuma.toLocaleString();
+            
+            updateBanners();
+            setInterval(updateBanners, 10000);
+        }
+
+        window.handleiTunesResponse = function(data) {
+            const albumArtBg = document.getElementById('album-art-bg');
+            const defaultLogoUrl = 'https://primera-stereo.netlify.app/11.png';
+            if (data && data.results && data.results.length > 0) {
+                let highResArt = data.results[0].artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg');
+                albumArtBg.style.backgroundImage = `url('${highResArt}')`;
+            } else { albumArtBg.style.backgroundImage = `url('${defaultLogoUrl}')`; }
+            const oldScript = document.getElementById('itunes-jsonp');
+            if (oldScript) oldScript.remove();
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioPlayer = new Audio();
+            const playBtn = document.getElementById('play-btn');
+            const volumeSlider = document.getElementById('volume-slider');
+            const statusIcon = document.getElementById('status-icon');
+            const statusText = document.getElementById('status-text');
+            const bars = document.querySelectorAll('#radio-visualizer .bar');
+            const albumArtBg = document.getElementById('album-art-bg');
+            const playerCard = document.getElementById('player-card');
+            const hoverControl = document.getElementById('hover-control');
+            const streamUrl = 'https://primerastereo.stream.laut.fm/primerastereo';
+            const metadataApiUrl = 'https://api.laut.fm/station/primerastereo/current_song';
+            const defaultLogoUrl = 'https://primera-stereo.netlify.app/11.png'; 
+            
+            const YOUTUBE_API_KEYS = [
+                "AIzaSyBg2xTKCbe0ZTZzisnDFyb-c_Hw4J0kIv0", // Llave Proyecto 1(Actual)                
+                "AIzaSyC5I-kdRPJpEYPnVPDz4W6jHSTXsn7EMhk", // Llave Proyecto 2
+                "AIzaSyBTg0pMsfux7GqmreETKukD16O5Tl3iS4Q", // Llave Proyecto 3
+                "AIzaSyA-GK-3or7nxT9TdOtLgl9j6RVW2rqnWJ8", // Llave Proyecto 4
+                "AIzaSyBFqPSg8UPMCzw7K124nykiZQvnXrBzAAw", // Llave Proyecto 5
+                "AIzaSyAB4cpqKmQkp3by1pFrP_1k9lKHdBZpnWE", // Llave Proyecto 6
+                "AIzaSyBSs7Tt5NpjJW1179goZ90KHGDhAo0Fjj4", // Llave Proyecto 7
+                "AIzaSyAONHjBvbc2U-mXHXSK_gsJNHX4glVTLps", // Llave Proyecto 8
+                "AIzaSyDzqfVE-iNft7AdlDluuIdaLK-8o5s5H18", // Llave Proyecto 9
+                "AIzaSyDzh3gdntYvz8OY3nIuY58yhtv89EOeGJ8", // Llave Proyecto 10
+                "AIzaSyCxU2onHMctFbLj0UKLt-SHjw8V80bmGgg", // Llave Proyecto 11
+                "AIzaSyDtVkrxNt62ifQzOf_arUE6XwK6lAVZ4rs", // Llave Proyecto 12
+                "AIzaSyA7wsWPS20LXSGEpNhjYvSudC1Yq7bZMcc", // Llave Proyecto 13
+                "AIzaSyB587PR4Xec8bS3VpFu7si5lYZwYweyijQ"  // Llave Proyecto 14
+            ];
+            let currentKeyIndex = 0; 
+            
+            let ytPlayer = null, isPlayerReady = false, currentArtistGlobal = "", currentTrackGlobal = "", isPlaying = false, metadataInterval = null, visualizerInterval = null;
+            let estaBuscandoVideo = false; 
+            
+            audioPlayer.src = streamUrl;
+            audioPlayer.volume = volumeSlider.value;
+            albumArtBg.style.backgroundImage = `url('${defaultLogoUrl}')`;
+
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            window.onYouTubeIframeAPIReady = function() {
+                ytPlayer = new YT.Player('yt-player-element', {
+                    height: '100%', width: '100%', videoId: 'dQw4w9WgXcQ', 
+                    playerVars: { 'autoplay': 1, 'controls': 0, 'rel': 0, 'loop': 1, 'mute': 1, 'playsinline': 1, 'disablekb': 1, 'origin': window.location.origin },
+                    events: {
+                        'onReady': function(event) { event.target.mute(); isPlayerReady = true; if (currentTrackGlobal && currentArtistGlobal) { searchAndPlayVideo(currentTrackGlobal, currentArtistGlobal); } },
+                        'onError': function(event) { 
+                            console.warn("⚠️ Error detectado en el reproductor de YouTube.");
+                            isPlayerReady = true; 
+                            fallbackToArtMode(); 
+                        }
+                    }
+                });
+            };
+
+            function togglePlayback() {
+                if (isPlaying) {
+                    audioPlayer.pause();
+                    if (ytPlayer && ytPlayer.pauseVideo && playerCard.classList.contains('video-mode')) { try { ytPlayer.pauseVideo(); } catch(e){} }
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    stopVisualizer();
+                    isPlaying = false;
+                } else {
+                    audioPlayer.play().then(() => {
+                        if (ytPlayer && ytPlayer.playVideo && playerCard.classList.contains('video-mode')) { try { ytPlayer.playVideo(); } catch(e){} }
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        startVisualizer();
+                        isPlaying = true;
+                    }).catch(err => { 
+                        console.warn("⚠️ Autoplay bloqueado:", err); 
+                    });
+                }
+            }
+            playBtn.addEventListener('click', togglePlayback);
+            volumeSlider.addEventListener('input', function() { audioPlayer.volume = this.value; });
+
+            function startVisualizer() {
+                clearInterval(visualizerInterval);
+                visualizerInterval = setInterval(() => {
+                    bars.forEach(bar => { if (isPlaying) { const height = Math.floor(Math.random() * 30) + 5; bar.style.height = `${height}px`; } });
+                }, 150);
+            }
+            function stopVisualizer() { clearInterval(visualizerInterval); bars.forEach(bar => bar.style.height = '5px'); }
+
+            function getAlbumArt(track, artist) {
+                const query = `${artist} ${track}`;
+                const oldScript = document.getElementById('itunes-jsonp');
+                if (oldScript) oldScript.remove();
+                const script = document.createElement('script');
+                script.id = 'itunes-jsonp';
+                script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=1&callback=handleiTunesResponse`;
+                script.onerror = function() { albumArtBg.style.backgroundImage = `url('${defaultLogoUrl}')`; };
+                document.body.appendChild(script);
+            }
+
+            async function searchAndPlayVideo(track, artist) {
+                const trackUpper = track.toUpperCase();
+                const artistUpper = artist.toUpperCase();
+
+                if (trackUpper.includes("PRIMERA STEREO") || artistUpper.includes("PRIMERA STEREO") || trackUpper.includes("JINGLE")) {
+                    if (ytPlayer && ytPlayer.stopVideo) { try { ytPlayer.stopVideo(); } catch(e){} }
+                    albumArtBg.style.backgroundImage = `url('${defaultLogoUrl}')`;
+                    playerCard.classList.remove('video-mode');
+                    return;
+                }
+
+                if (estaBuscandoVideo) return;
+                estaBuscandoVideo = true;
+
+                let cleanTrack = track.replace(/\(.*?\)/g, "").replace(/\[.*?\]/g, "").trim();
+                const videoQuery = `${artist} ${cleanTrack} "Official Video"`;
+                
+                getAlbumArt(cleanTrack, artist);
+                
+                // 🚀 CORRECCIÓN CRÍTICA: La verificación de caché pasa arriba del todo para evitar retrasos
+                const cacheKey = btoa(unescape(encodeURIComponent(videoQuery))); 
+                const cachedVideoId = localStorage.getItem(`yt_${cacheKey}`);
+                
+                if (cachedVideoId) {
+                    console.log("Video recuperado del caché local (0 cuota consumida):", cachedVideoId);
+                    executeVideoLoad(cachedVideoId);
+                    estaBuscandoVideo = false; 
+                    return;
+                }
+
+                // Si no está en caché, entonces sí procedemos con las peticiones externas ordenadamente
+                console.log("🔍 Canción nueva. Buscando en YouTube con Llave Índice: " + currentKeyIndex + " (Proyecto " + (currentKeyIndex + 1) + ")");
+                
+                while (currentKeyIndex < YOUTUBE_API_KEYS.length) {
+                    const activeKey = YOUTUBE_API_KEYS[currentKeyIndex];
+                    try {
+                        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(videoQuery)}&type=video&key=${activeKey}`;
+                        const response = await fetch(searchUrl);
+                        
+                        if (response.status === 403 || response.status === 429) {
+                            console.warn(`⚠️ Llave Proyecto ${currentKeyIndex + 1} agotada. Rotando...`);
+                            currentKeyIndex++;
+                            continue; // Salta inmediatamente a evaluar la siguiente llave en la lista
+                        }
+
+                        const data = await response.json();
+                        const validVideo = data.items.find(item => {
+                            const title = item.snippet.title.toUpperCase();
+                            return !title.includes("COVER") && !title.includes("KARAOKE") && !title.includes("LYRICS") && !title.includes("LYRIC") && !title.includes("REACCION") && !title.includes("REACCIÓN");
+                        });
+
+                        if (validVideo) {
+                            localStorage.setItem(`yt_${cacheKey}`, validVideo.id.videoId);
+                            executeVideoLoad(validVideo.id.videoId);
+                            estaBuscandoVideo = false; 
+                            return; 
+                        } else {
+                            fallbackToArtMode();
+                            estaBuscandoVideo = false;
+                            return;
+                        }
+                    } catch (error) { 
+                        fallbackToArtMode(); 
+                        estaBuscandoVideo = false;
+                        return;
+                    }
+                }
+                
+                console.error("Todas las API Keys del rotador se han agotado.");
+                fallbackToArtMode();
+                estaBuscandoVideo = false; 
+            }
+
+            function fallbackToArtMode() {
+                playerCard.classList.remove('video-mode');
+                playerCard.classList.add('art-mode');
+                hoverControl.classList.remove('controls-hidden');
+            }
+
+            function executeVideoLoad(videoId) {
+                if (!isPlayerReady || !ytPlayer) return;
+                try {
+                    ytPlayer.loadVideoById({ videoId: videoId, startSeconds: 0 });
+                    try { ytPlayer.mute(); } catch(e){}
+                    playerCard.classList.remove('art-mode');
+                    playerCard.classList.add('video-mode');
+                    hoverControl.classList.add('controls-hidden'); 
+                } catch (err) { fallbackToArtMode(); }
+            }
+            
+            async function updateMetadata() {
+                try {
+                    const response = await fetch(metadataApiUrl + '?t=' + new Date().getTime());
+                    const data = await response.json();
+                    if (data && data.title) {
+                        const currentTrack = data.title;
+                        const currentArtist = (data.artist && data.artist.name) ? data.artist.name : 'PRIMERA STEREO';
+                        statusText.innerHTML = `<span class='metadata-artist'>${currentArtist}</span> - <span class='metadata-track'>${currentTrack}</span>`;
+                        if (currentArtist !== currentArtistGlobal || currentTrack !== currentTrackGlobal) {
+                            currentArtistGlobal = currentArtist; currentTrackGlobal = currentTrack;
+                            
+                            if (ytPlayer && ytPlayer.stopVideo) {
+                                try { ytPlayer.stopVideo(); } catch(e){}
+                            }
+                            fallbackToArtMode(); 
+                            searchAndPlayVideo(currentTrack, currentArtist);
+                        }
+                    }
+                } catch (error) { console.error(error); }
+            }
+            updateMetadata();
+            setInterval(updateMetadata, 5000);
+
+            setTimeout(() => {
+                if (!isPlaying) {
+                    togglePlayback();
+                }
+            }, 2000);
+
+            ['click', 'touchstart', 'keydown'].forEach(evt => {
+                window.addEventListener(evt, () => {
+                    if (!isPlaying) {
+                        togglePlayback();
+                    }
+                }, { once: true });
+            });
+
+            playerCard.addEventListener('touchstart', function() {
+                playerCard.classList.add('touch-active');
+                setTimeout(() => playerCard.classList.remove('touch-active'), 4000);
+            }, { passive: true });
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('PWA Primera Stereo lista'))
+                    .catch(err => console.error('Error SW:', err));
+            });
+        }
+    </script>
+</body>
+</html>
